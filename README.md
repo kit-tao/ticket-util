@@ -17,10 +17,10 @@ The design of this software utility assumes the following:
 
 1. The Date column in the report contains the  timestamp of when the ticket was created or when there is changed of status. 
     i.e. when ticket's status is changed, the Date column contains the date when status change occurred.
-2. No database is used to store the history of the ticket status report. Therefore it will only identify ticket with closed status from a last report run date.
+2. No database is used in this solution to store any history of the ticket status report. Therefore it can only identify ticket with closed status from a last report run date.
 
 
-# Prerequisites
+## Prerequisites
 
 ### Google API
  
@@ -48,7 +48,7 @@ https://www.python.org/downloads/
 
 
 
-# Installation
+## Installation
 
 On Windows, Git Bash
 
@@ -69,7 +69,7 @@ Run venv\scripts\activate.bat
 pip install -r requirements.txt
 
 
-## Files
+### Files
 
 * Main program : process_ticket.py
 * Google api module: google_api.py
@@ -80,7 +80,7 @@ pip install -r requirements.txt
 
 
 
-## Prepare the host to authenticate with Google API 
+### Prepare the host to authenticate with Google API 
 
 * Ensure that the credential.json which contains the Google client_secret_key credential is present in the same folder as process_ticket.py.
 
@@ -98,7 +98,7 @@ The google_api.py utility will open web browser to authenticate user to Google.
 If the authentication and authorization is successful then the util will display records of the Google spreadsheet.
 
 
-# First time Setup
+## First time Setup
 
 The utility has one json config file "last_run_date.json" which stores the last_run_date.  
 This date is used to process new records in the spreadsheet where Date > last_run_date.
@@ -116,7 +116,7 @@ if a different default date is required, with one entry like below(where DD/MM/Y
 
 
 
-# Windows scheduler setup
+## Windows scheduler setup
 
 On the Windows EC2, 
 
@@ -125,24 +125,27 @@ Create Windows scheduler task to call the batch file run_util.bat on a weekly ba
 
 
 
-# Utility Command line usage
+## Utility Command line usage
 e.g.
 python process_ticket.py -sheetid <google sheet id> -range "Sheet1!A2:F" -webhook_url <webhook url> -testmode yes
 
--sheetid - <google sheet id>
--webhook_url - <webhook url>
--testmode yes - means the email api will not be invoked
+-sheetid <google sheet id>
+-webhook_url <webhook url>
+-testmode yes (when testmode is yes then no email api will be invoked).
+
+    
+    
+    
 
 
 
-
-## Future improvements
+# Future improvements
 
 * Use Google API keys instead of OAuth. so that application can pass API keys to Google API without getting prompted for Oauth Consent page.
 
 * Instead of using Google Spreadsheet, If the Excel report can be uploaded to AWS S3 bucket.  Then a AWS lambda Python runtime can be used to host this utility and configured to run based on S3 object creation event.
 
-* Dynamo DB table can be used to store the last_run_date instead of storing the last_run_date in a local json file. 
+* If lambda runtime is used then Dynamo DB table can be used to store the last_run_date. 
 
 
 
