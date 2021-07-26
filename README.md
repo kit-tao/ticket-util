@@ -17,7 +17,7 @@ The design of this software utility assumes the following:
 
 1. The Date column in the report contains the  timestamp of when the ticket was created or when there is changed of status. 
     i.e. when ticket's status is changed, the Date column contains the date when status change occurred.
-2. No database is used to store the history of the ticket status report. Therefore it will only identify ticket with closed status from a last report run date.
+2. No database is used to store the history of the ticket status report. Therefore it can only identify ticket with closed status from a last report run date.
 
 
 # Prerequisites
@@ -129,9 +129,9 @@ Create Windows scheduler task to call the batch file run_util.bat on a weekly ba
 e.g.
 python process_ticket.py -sheetid <google sheet id> -range "Sheet1!A2:F" -webhook_url <webhook url> -testmode yes
 
--sheetid - <google sheet id>
--webhook_url - <webhook url>
--testmode yes - means the email api will not be invoked
+-sheetid <google sheet id>
+-webhook_url <webhook url>
+-testmode yes (when testmode is yes then no email api will be invoked).
 
 
 
@@ -142,7 +142,7 @@ python process_ticket.py -sheetid <google sheet id> -range "Sheet1!A2:F" -webhoo
 
 * Instead of using Google Spreadsheet, If the Excel report can be uploaded to AWS S3 bucket.  Then a AWS lambda Python runtime can be used to host this utility and configured to run based on S3 object creation event.
 
-* Dynamo DB table can be used to store the last_run_date instead of storing the last_run_date in a local json file. 
+* If lambda runtime is used then Dynamo DB table can be used to store the last_run_date. 
 
 
 
