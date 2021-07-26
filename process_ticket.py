@@ -126,7 +126,8 @@ def generate_json(out_df):
             detail_df = out_df[(out_df['Fullname'] == row["Fullname"])]    
             for i, det in detail_df.iterrows():
                 print(det)
-                body = body + "Ticket no. {0} was closed on {1}\n".format(det["Ticket"], det["Date"].strftime('%Y.%m.%d'))
+                # show Date in DD-MON-YYYY
+                body = body + "Ticket no. {0} was closed on {1}\n".format(det["Ticket"], det["Date"].strftime('%d-%b-%Y'))
                 
             s_email = {'subject': subject, 'to_address': [row["Email"]], 'cc_address':[""], 'body': body}
             s_main = {'full_name':fullname, 'email_address':row["Email"], "ready_to_send": True, 'email':s_email}
@@ -179,14 +180,18 @@ parser.add_argument('-testmode', help='if yes is specified then run in test mode
 
 args = parser.parse_args()
 
-
+def output_file(txt, outfile):
+    with open(outfile, "w") as jsonfile:
+        jsonfile.write(txt)
 
 if __name__ == "__main__":
     last_run_date = get_last_run_date()
     df = get_data_api(spreadsheet_id=args.sheetid, range_name= args.range)
-    df.to_csv("raw_data.csv")
+    
     out_df = filter_report(df, last_run_date)
     load = generate_json(out_df)
+    
+    
     if args.testmode != "yes":
         status = ""
         if len(load) != 0:
